@@ -16,7 +16,7 @@ function clampWindow(dates,a,b,minPts){
  if(hi-lo+1<need){const center=Math.round((lo+hi)/2);lo=Math.max(0,center-Math.floor((need-1)/2));hi=Math.min(dates.length-1,lo+need-1);lo=Math.max(0,hi-need+1)}
  return [dates[lo],dates[hi]]
 }
-function presetWindow(dates,key){const end=Date.parse(dates.at(-1));if(key==="ALL")return[dates[0],dates.at(-1)];const days={1M:30,3M:90,6M:183,12M:365,1Y:365,3Y:1095,5Y:1826}[key]||365;const start=new Date(end-days*86400000).toISOString().slice(0,10);return[dates[Math.max(0,nearestIndex(dates,start))],dates.at(-1)]}
+function presetWindow(dates,key){const end=Date.parse(dates.at(-1));if(key==="ALL")return[dates[0],dates.at(-1)];const days={"1M":30,"3M":90,"6M":183,"12M":365,"1Y":365,"3Y":1095,"5Y":1826}[key]||365;const start=new Date(end-days*86400000).toISOString().slice(0,10);return[dates[Math.max(0,nearestIndex(dates,start))],dates.at(-1)]}
 function bindTabs(){ $$(".tab").forEach(b=>b.onclick=()=>{$$(".tab").forEach(x=>x.classList.remove("active"));$$(".panel").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("#"+b.dataset.tab).classList.add("active");setTimeout(()=>window.dispatchEvent(new Event("resize")),80)})}
 
 let H,F,historyRange,forwardRange,historyBusy=false,forwardBusy=false,currentCategory="historical_return";
