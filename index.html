@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cross Strategy Research Dashboard</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Cross Strategy Research Dashboard</h1>
+      <div class="muted">110 策略历史研究 · Top10 选择器 · Forward OOS</div>
+    </div>
+    <div id="asof" class="badge">LOADING</div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="historical">历史 Top10</button>
+    <button class="tab" data-tab="forward">Forward OOS</button>
+    <button class="tab" data-tab="registry">110 策略总表</button>
+  </nav>
+
+  <section id="historical" class="panel active">
+    <div class="toolbar card">
+      <div class="control grow">
+        <label>榜单</label>
+        <select id="rankingSelect"></select>
+        <div id="rankingDesc" class="tiny"></div>
+      </div>
+      <div class="range" id="historyPresets">
+        <button data-range="1Y">1Y</button><button data-range="3Y">3Y</button><button data-range="5Y">5Y</button><button class="active" data-range="ALL">ALL</button>
+      </div>
+      <div class="dates">
+        <input id="historyStart" type="date"><span>→</span><input id="historyEnd" type="date"><button id="historyApply">应用</button>
+      </div>
+    </div>
+    <div id="historyCards" class="kpis"></div>
+    <div class="card section">
+      <div class="sectionHead"><div><h2 id="historyTitle">历史净值</h2><div class="tiny">股票式净值折线；可拖动，可用下方滑块；缩放被限制在真实数据边界和最小 60 个交易日。</div></div><button id="historyReset" class="ghost">重置视图</button></div>
+      <div id="historyChart" class="chart"></div>
+    </div>
+    <div class="card section"><h2>当前 Top10</h2><div id="historyTable" class="tablewrap"></div></div>
+    <div id="historyCaveat" class="note section"></div>
+  </section>
+
+  <section id="forward" class="panel">
+    <div class="toolbar card">
+      <div class="control grow"><label>Forward OOS</label><div id="forwardMeta" class="small"></div></div>
+      <div class="range" id="forwardPresets">
+        <button data-range="1M">1M</button><button data-range="3M">3M</button><button data-range="6M">6M</button><button data-range="12M">12M</button><button class="active" data-range="ALL">ALL</button>
+      </div>
+      <div class="dates">
+        <input id="forwardStart" type="date"><span>→</span><input id="forwardEnd" type="date"><button id="forwardApply">应用</button>
+      </div>
+    </div>
+    <div id="forwardCards" class="kpis"></div>
+    <div class="card section">
+      <div class="sectionHead"><div><h2>Forward OOS 净值</h2><div class="tiny">只显示 2026-10-19 冻结边界之后的正式 paper Forward 记录。</div></div><button id="forwardReset" class="ghost">重置视图</button></div>
+      <div id="forwardEquity" class="chart"></div>
+    </div>
+    <div class="card section"><h2>Forward Drawdown</h2><div id="forwardDrawdown" class="chart smallchart"></div></div>
+    <div class="card section"><h2>最新 Lane 状态</h2><div id="forwardTable" class="tablewrap"></div></div>
+    <div class="card section"><h2>交易事件</h2><div id="tradeTable" class="tablewrap"></div></div>
+    <div class="note section">跨家族组合目前没有独立、冻结后的 Forward OOS feed，因此本页不把历史组合回放伪装成 Forward。这里先接 BOX FWD-01～FWD-06 的正式 prospective feed。</div>
+  </section>
+
+  <section id="registry" class="panel">
+    <div class="toolbar card">
+      <div class="control grow"><label>搜索 110 策略</label><input id="registrySearch" type="search" placeholder="例如 FWD-05 / REGIME / Risk"></div>
+    </div>
+    <div class="card section"><div id="registryTable" class="tablewrap tall"></div></div>
+  </section>
+</div>
+<script src="assets/app.js"></script>
+</body>
+</html>
