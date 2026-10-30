@@ -71,9 +71,20 @@ function bindForward(){
  $("#forwardApply").onclick=()=>renderForward([$("#forwardStart").value,$("#forwardEnd").value]);$("#forwardReset").onclick=()=>renderForward([dates[0],dates.at(-1)]);
  renderForward([dates[0],dates.at(-1)]);
 }
+function renderRegistryCards(){
+ const p=H.phaseCoverage||{};
+ const items=[
+  ["基础结构 Phase",p.baseClassified!=null?p.baseClassified+"/"+p.baseTotal:"—"],
+  ["Strict PASS",p.strictPassKnown??"—"],
+  ["需要融资",p.financingRequiredKnown??"—"],
+  ["仍待 Phase",p.baseUntested??"—"],
+  ["权重场景 Phase",p.weightClassified!=null?p.weightClassified+"/"+p.weightTotal:"—"]
+ ];
+ $("#registryCards").innerHTML=items.map(x=>"<div class='metric'><span class='small'>"+esc(x[0])+"</span><b>"+esc(x[1])+"</b></div>").join("");
+}
 function renderRegistry(filter=""){
- const q=filter.trim().toLowerCase(),rows=H.registry.filter(r=>!q||[r.id,r.type,r.components.join(" "),r.weights,r.finalStatus].join(" ").toLowerCase().includes(q));
- $("#registryTable").innerHTML=table(rows,[["结构",r=>esc(r.id)],["类型",r=>esc(r.type)],["权重",r=>esc(r.weights)],["累计收益",r=>pct(r.totalReturnPct)],["CAGR",r=>pct(r.cagrPct)],["MaxDD",r=>pct(r.mddPct)],["Sharpe",r=>fmt(r.sharpe,3)],["月正收益占比",r=>pct(r.monthlyPositivePct)],["25bps CAGR",r=>pct(r.cost25CagrPct)],["Strict",r=>esc(r.strictStatus)],["状态",r=>esc(r.finalStatus)]])
+ const q=filter.trim().toLowerCase(),rows=H.registry.filter(r=>!q||[r.id,r.type,r.components.join(" "),r.weights,r.strictStatus,r.phaseCashEvidence,r.tradeCoverage].join(" ").toLowerCase().includes(q));
+ $("#registryTable").innerHTML=table(rows,[["结构",r=>esc(r.id)],["类型",r=>esc(r.type)],["权重",r=>esc(r.weights)],["累计收益",r=>pct(r.totalReturnPct)],["CAGR",r=>pct(r.cagrPct)],["MaxDD",r=>pct(r.mddPct)],["Sharpe",r=>fmt(r.sharpe,3)],["月正收益占比",r=>pct(r.monthlyPositivePct)],["25bps CAGR",r=>pct(r.cost25CagrPct)],["Strict",r=>esc(r.strictStatus)],["Phase证据",r=>esc(r.phaseCashEvidence||"—")]])
 }
 (async()=>{
  bindTabs();
@@ -81,5 +92,5 @@ function renderRegistry(filter=""){
  F=await loadForward();
  $("#asof").textContent="HIST "+H.window.end+" · FWD "+(F.last_processed_market_date||"—");
  historyRange=[H.dates[0],H.dates.at(-1)];forwardRange=[forwardDates()[0],forwardDates().at(-1)];
- bindHistory();bindForward();renderRegistry();$("#registrySearch").oninput=e=>renderRegistry(e.target.value);
+ bindHistory();bindForward();renderRegistryCards();renderRegistry();$("#registrySearch").oninput=e=>renderRegistry(e.target.value);
 })().catch(err=>{console.error(err);document.body.insertAdjacentHTML("beforeend","<div class='wrap bad'>Dashboard load error: "+esc(err.message||err)+"</div>")});
