@@ -19,6 +19,7 @@ jobs:
           python -m json.tool data/v2/DRAWDOWN_SUMMARY.json >/dev/null
           test -f index.html
           test -f data/v2/MASTER_RESULTS_304_WITH_STABILITY.csv
+          test -f data/v2/304_STRUCTURE_INDEX.csv
           test -f data/v2/execution/MASTER_RESULTS_110.csv
           test -f data/v2/execution/NEW_VARIANT_CONFLICT_EXACT_34.csv
           test -f data/v2/rankings/TOP10_HISTORICAL_RETURN.csv
@@ -35,7 +36,11 @@ jobs:
           root=pathlib.Path('.')
           with open(root/'data/v2/MASTER_RESULTS_304_WITH_STABILITY.csv',newline='',encoding='utf-8') as f:
               master=list(csv.DictReader(f))
+          with open(root/'data/v2/304_STRUCTURE_INDEX.csv',newline='',encoding='utf-8') as f:
+              index_rows=list(csv.DictReader(f))
           assert len(master)==304, len(master)
+          assert len(index_rows)==304, len(index_rows)
+          assert {r['structure_id'] for r in index_rows}=={r['structure_id'] for r in master}
           nav_files=[
               'BOX_FROZEN.csv','BOX_RISK.csv','CAPITAL_FROZEN.csv','RISK_FROZEN.csv',
               'TRIPLE_FIXED3.csv','TRIPLE_NEXT_OPEN.csv','TRIPLE_SAME_CLOSE.csv','TRIPLE_T6.csv'
