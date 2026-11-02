@@ -1,11 +1,10 @@
 # Cross Strategy Research Dashboard
 
-Public dashboard for the three-family cross-strategy research program.
+Public dashboard repository for the three-family cross-strategy research program.
 
-## Live dashboard
+## Repository
 
-- GitHub Pages: https://galbbb2772.github.io/cross-strategy-dashboard/
-- Source repository: https://github.com/galbbb2772/cross-strategy-dashboard
+- https://github.com/galbbb2772/cross-strategy-dashboard
 
 ## Current V2 scope
 
