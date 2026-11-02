@@ -183,7 +183,10 @@ function renderRegistryCards(){const pass=MASTER.filter(r=>r.strict_1x_status_20
 
 (async()=>{
   bindTabs();
-  [MASTER,PHASE,DDS]=await Promise.all([fetchCSV(DATA+'MASTER_RESULTS_304_WITH_STABILITY.csv'),fetchJSON(DATA+'PHASE_STATUS_SUMMARY.json'),fetchJSON(DATA+'DRAWDOWN_SUMMARY.json')]);
+  const [master,indexRows,phase,dds]=await Promise.all([fetchCSV(DATA+'MASTER_RESULTS_304_WITH_STABILITY.csv'),fetchCSV(DATA+'304_STRUCTURE_INDEX.csv'),fetchJSON(DATA+'PHASE_STATUS_SUMMARY.json'),fetchJSON(DATA+'DRAWDOWN_SUMMARY.json')]);
+  const indexBy=new Map(indexRows.map(r=>[r.structure_id,r]));
+  MASTER=master.map(r=>{const x=indexBy.get(r.structure_id)||{};return{...r,legacy_combo_id:x.legacy_combo_id||r.legacy_combo_id,strict_1x_status_2022_2026Q1:x.strict_1x_status_2022_2026Q1||r.strict_1x_status_2022_2026Q1,phase_cash_evidence:x.phase_cash_evidence||r.phase_cash_evidence}});
+  PHASE=phase;DDS=dds;
   MASTER_BY_ID=new Map(MASTER.map(r=>[r.structure_id,r]));
   await buildExecutionMap();
   F=await loadForward();
